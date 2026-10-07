@@ -1,0 +1,83 @@
+# AgentQA Cloud — production-style stack:  docker compose up --build
+#   frontend  http://localhost:8080   backend  http://localhost:8000   (docs: /docs)
+# Redis is NOT included: live events use an in-process bus, so it is not needed.
+# The bundled demo shop (intentional bugs) is opt-in:  docker compose --profile demo up --build
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-agentqa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-agentqa}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-agentqa} -d ${POSTGRES_DB:-agentqa}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # not published to the host: only the backend needs it
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    init: true          # reap Chromium child processes
+    ipc: host           # Chromium needs a large /dev/shm
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-agentqa}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-agentqa}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      ALLOWED_DOMAINS: ${ALLOWED_DOMAINS:-}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS:-http://localhost:8080}
+      BROWSER_ALLOW_PRIVATE_NETWORKS: ${BROWSER_ALLOW_PRIVATE_NETWORKS:-false}
+      MAX_STEPS: ${MAX_STEPS:-100}
+      MAX_RUNTIME: ${MAX_RUNTIME:-900}
+      MAX_CONCURRENT_BROWSERS: ${MAX_CONCURRENT_BROWSERS:-1}
+      FIX_AGENT_ENABLED: ${FIX_AGENT_ENABLED:-false}
+      ENVIRONMENT: production
+      AUTO_CREATE_SCHEMA: "false"          # schema is managed by Alembic (run on container start)
+      SCREENSHOT_DIR: /data/artifacts/screenshots
+      TRACE_DIR: /data/artifacts/traces
+      DOM_SNAPSHOT_DIR: /data/artifacts/dom
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - artifacts:/data/artifacts
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=4).status==200 else 1)"]
+      interval: 15s
+      timeout: 5s
+      start_period: 40s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+
+  demo-shop:
+    profiles: ["demo"]
+    image: python:3.12-alpine
+    working_dir: /demo
+    volumes:
+      - ./demo-app:/demo:ro
+    environment:
+      DEMO_BIND: 0.0.0.0
+    command: ["python", "server.py", "8090"]
+    # Reachable by the backend as http://demo-shop:8090 only if BROWSER_ALLOW_PRIVATE_NETWORKS=true
+    # (private addresses are blocked by default). Test machines only — never on a shared deployment.
+
+volumes:
+  pgdata:
+  artifacts:

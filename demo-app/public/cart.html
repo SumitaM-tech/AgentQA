@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Cart - Demo Shop</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><script src="/common.js"></script></head>
+<body style="font-family:sans-serif"><main style="padding:12px 16px"><h1>Cart</h1>
+<ul id="items"></ul><p id="total"></p><button id="coupon" type="button">Apply coupon</button> <a href="/checkout.html">Checkout</a><p id="msg" role="status"></p><div id="rec"></div>
+</main><script>
+
+const c=cart.get();items.innerHTML=c.length?c.map(p=>`<li>${p.name} — $${p.price}</li>`).join(""):"<li>Your cart is empty</li>";
+total.textContent="Total: $"+c.reduce((s,p)=>s+p.price,0).toFixed(2);
+// BUG 3: recommendations endpoint returns HTTP 500
+fetch("/api/recommendations").then(r=>r.json()).then(x=>rec.textContent=x.items.length);
+// BUG 4: uncaught exception when the coupon button is clicked
+coupon.onclick=()=>{ const rules=undefined; msg.textContent=rules.discount; };
+</script></body></html>

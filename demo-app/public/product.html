@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Product details - Demo Shop</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><script src="/common.js"></script></head>
+<body style="font-family:sans-serif"><main style="padding:12px 16px"><h1>Product details</h1>
+<h2 id="name"></h2><p id="price"></p><button id="add" type="button">Add to cart</button><p id="msg" role="status"></p>
+</main><script>
+
+const id=+new URLSearchParams(location.search).get("id")||1;
+fetch("/api/products").then(r=>r.json()).then(ps=>{const p=ps.find(x=>x.id===id)||ps[0];name.textContent=p.name;price.textContent="$"+p.price;
+add.onclick=()=>{const c=cart.get();c.push(p);cart.set(c);msg.textContent="Added to cart";}});
+</script></body></html>

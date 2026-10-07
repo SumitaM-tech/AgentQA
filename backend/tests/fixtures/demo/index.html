@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Demo Shop</title></head>
+<body>
+  <nav><a href="/products.html">Products</a> <a href="/about.html">About</a></nav>
+  <h1>Demo Shop</h1>
+  <p id="msg">Welcome</p>
+  <form onsubmit="return false" aria-label="Newsletter">
+    <label for="email">Email</label><input id="email" name="email" type="text" />
+    <button id="subscribe" type="button" onclick="subscribe()">Subscribe</button>
+  </form>
+  <script>
+    // Deliberate bug for the e2e test: the page logs an error on every load.
+    console.error("demo-shop: analytics config missing");
+    function subscribe(){ document.getElementById('msg').textContent = 'Thanks for subscribing'; }
+  </script>
+</body></html>

@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Search - Demo Shop</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><script src="/common.js"></script></head>
+<body style="font-family:sans-serif"><main style="padding:12px 16px"><h1>Search</h1>
+<form onsubmit="return false"><label for="q">Search products</label> <input id="q" name="q" type="text"> <button id="go" type="button">Search</button></form><ul id="res"></ul>
+</main><script>
+
+go.onclick=()=>fetch("/api/search?q="+encodeURIComponent(q.value)).then(r=>r.json()).then(ps=>{res.innerHTML=ps.length?ps.map(p=>`<li>${p.name}</li>`).join(""):"<li>No results</li>"});
+</script></body></html>

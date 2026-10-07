@@ -1,0 +1,17 @@
+<!doctype html>
+<html><head><title>Form Fixture</title></head>
+<body>
+  <h1>Checkout</h1>
+  <label for="name">Name</label><input id="name" type="text" placeholder="Your name" />
+  <input id="pw" type="password" placeholder="Password" />
+  <select id="country"><option value="us">United States</option><option value="in">India</option></select>
+  <label><input id="agree" type="checkbox" /> I agree</label>
+  <button id="go" onclick="document.getElementById('out').innerText='Submitted ' + document.getElementById('name').value">Submit</button>
+  <button id="boom" onclick="console.error('boom happened')">Boom</button>
+  <button id="disabled" disabled>Disabled</button>
+  <a id="next" href="second.html">Next page</a>
+  <a id="popup" href="second.html" target="_blank">Popup</a>
+  <div id="out"></div>
+  <div style="height:3000px"></div>
+  <img src="/missing.png" />
+</body></html>

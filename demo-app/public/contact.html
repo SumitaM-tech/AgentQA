@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Contact - Demo Shop</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><script src="/common.js"></script></head>
+<body style="font-family:sans-serif"><main style="padding:12px 16px"><h1>Contact</h1>
+<form onsubmit="return false"><label for="m">Message</label> <textarea id="m"></textarea><br><button id="send" type="button">Send</button></form><p id="msg" role="status"></p>
+</main><script>
+
+send.onclick=()=>{ if(!m.value.trim()){msg.textContent="Please enter a message";return;} msg.textContent="Message sent"; };
+</script></body></html>

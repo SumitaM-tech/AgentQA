@@ -1,0 +1,9 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Checkout - Demo Shop</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><script src="/common.js"></script></head>
+<body style="font-family:sans-serif"><main style="padding:12px 16px"><h1>Checkout</h1>
+<form onsubmit="return false"><label for="name">Full name</label> <input id="name" type="text"><br><label for="card">Card number</label> <input id="card" type="text"><br><label for="addr">Address</label> <input id="addr" type="text"><br><button id="pay" type="button">Pay now</button></form><p id="msg" role="status"></p>
+</main><script>
+
+// BUG 6: card number is never validated — "abc" is accepted and the order is placed
+pay.onclick=()=>{msg.textContent="Order placed! Thank you.";cart.set([]);};
+</script></body></html>

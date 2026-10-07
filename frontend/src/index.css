@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 224 30% 6%;
+    --foreground: 210 20% 94%;
+    --card: 224 26% 9%;
+    --muted: 224 20% 14%;
+    --muted-foreground: 218 12% 62%;
+    --border: 224 18% 18%;
+    --primary: 252 90% 68%;
+    --primary-foreground: 0 0% 100%;
+    --success: 152 60% 48%;
+    --warning: 38 92% 56%;
+    --danger: 0 84% 64%;
+    --info: 199 89% 58%;
+  }
+  .light {
+    --background: 220 25% 97%;
+    --foreground: 224 30% 12%;
+    --card: 0 0% 100%;
+    --muted: 220 18% 92%;
+    --muted-foreground: 220 10% 38%;
+    --border: 220 14% 84%;
+    --primary: 252 75% 52%;
+    --success: 152 65% 32%;
+    --warning: 32 90% 38%;
+    --danger: 0 72% 46%;
+    --info: 205 85% 38%;
+  }
+  .light { color-scheme: light; }
+  * { @apply border-border; }
+  html { color-scheme: dark; }
+  html.light { color-scheme: light; }
+  body { @apply bg-background text-foreground font-sans antialiased; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 8px; }
+  :focus-visible { @apply outline-none ring-2 ring-primary/70 ring-offset-2 ring-offset-background; }
+}
+
+@layer components {
+  .glass { @apply bg-card/70 backdrop-blur border border-border rounded-xl; }
+}
+
+/* React Flow tweaks for the dark theme */
+.react-flow__controls { box-shadow: none; border: 1px solid hsl(var(--border)); border-radius: 10px; overflow: hidden; }
+.react-flow__controls-button { background: hsl(var(--card)); border-bottom: 1px solid hsl(var(--border)); fill: hsl(var(--foreground)); }
+.react-flow__controls-button:hover { background: hsl(var(--muted)); }
+.react-flow__attribution { display: none; }
+.react-flow__edge-text { fill: hsl(var(--muted-foreground)); font-size: 10px; }
+.react-flow__minimap { background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 10px; }

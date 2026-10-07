@@ -1,0 +1,9 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Register - Demo Shop</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><script src="/common.js"></script></head>
+<body style="font-family:sans-serif"><main style="padding:12px 16px"><h1>Register</h1>
+<form onsubmit="return false"><label for="email">Email</label> <input id="email" type="text"><br><label for="pw">Password</label> <input id="pw" type="password"><br><button id="go" type="button">Create account</button></form><p id="msg" role="status"></p>
+</main><script>
+
+// BUG 5: no validation at all — an empty or malformed email/password is accepted
+go.onclick=()=>{msg.textContent="Account created successfully!";};
+</script></body></html>

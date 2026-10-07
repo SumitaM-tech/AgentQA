@@ -1,0 +1,11 @@
+{
+  "app": "AgentQA demo shop (intentional bugs)",
+  "bugs": [
+    {"id": "console-error-products", "url_path": "/products.html", "categories": ["console_error", "exception"], "keywords": ["catalog", "console"], "detectable_by": "rules"},
+    {"id": "broken-nav-deals", "url_path": "/deals.html", "categories": ["navigation", "network", "http_4xx"], "keywords": ["404", "deals", "not found"], "detectable_by": "rules"},
+    {"id": "cart-recommendations-500", "url_path": "/cart.html", "categories": ["network", "http_5xx"], "keywords": ["500", "recommendations"], "detectable_by": "rules"},
+    {"id": "coupon-uncaught-exception", "url_path": "/cart.html", "categories": ["exception", "console_error"], "keywords": ["uncaught", "undefined", "discount"], "detectable_by": "rules"},
+    {"id": "register-no-validation", "url_path": "/register.html", "categories": ["validation", "functional"], "keywords": ["valid", "email", "account created"], "detectable_by": "llm"},
+    {"id": "checkout-invalid-card-accepted", "url_path": "/checkout.html", "categories": ["validation", "functional"], "keywords": ["card", "order placed", "valid"], "detectable_by": "llm"}
+  ]
+}
